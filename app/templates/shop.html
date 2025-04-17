@@ -21,8 +21,8 @@
       </a>
     </div>
     <div class="nav-links">
-      <a href="#">Explore</a>
-      <a href="#">Shop</a>
+      <a href="/home/">Explore</a>
+      <a href="/shop/">Shop</a>
       <a href="#">New collections</a>
       <a href="#">Learn about GD</a>
     </div>
@@ -38,7 +38,7 @@
       <i class="fas fa-user-circle"></i>
     </div>
   </nav>
-  <!-- баннер и гавно -->
+  <!-- баннер -->
   <section class="shop-section">
     <div class="banner2">
       <img src="/static/images/i.png" alt="banner">
@@ -122,55 +122,21 @@
   </section>
   
   <div class="products-grid">
+    {% for product in products %}
     <div class="product-card">
-      <img src="/static/images/ganyu.jpg" alt="Product" class="product-image">
-      <button class="wishlist-button">♡</button>
-      <div class="product-info">
-        <div class="product-tags">
-          <span class="tag">BEST SELLER</span>
-          <span class="tag">TOP GIFT</span>
-        </div>
-        <h3 class="product-title">продукт</h3>
-      </div>
-    </div>
-    
-    <div class="product-card">
-      <img src="/static/images/ganyu.jpg" alt="Product" class="product-image">
-      <button class="wishlist-button">♡</button>
-      <div class="product-info">
-        <div class="product-tags">
-          <span class="tag">NEW</span>
-          <span class="tag">TOP GIFT</span>
-          <span class="tag">BEST SELLER</span>
-        </div>
-        <h3 class="product-title">продукт</h3>
-      </div>
-    </div>
-    
-    <div class="product-card">
-      <img src="/static/images/ganyu.jpg" alt="Product" class="product-image">
+      <img src="{{ product.image }}" alt="Product" class="product-image">
       <button class="wishlist-button">♡</button>
       <div class="product-info">
         <div class="product-tags">
           <span class="tag">BEST SELLER</span>
         </div>
-        <h3 class="product-title">продукт</h3>
+        <h3 class="product-title">{{ product.name }}</h3>
+        <p class="product-description">{{ product.description }}</p>
+        <p class="product-price">{{ product.price }} ₸</p>
       </div>
     </div>
-    
-    <div class="product-card">
-      <img src="/static/images/ganyu.jpg" alt="Product" class="product-image">
-      <button class="wishlist-button">♡</button>
-      <div class="product-info">
-        <div class="product-tags">
-          <span class="tag">BEST SELLER</span>
-        </div>
-        <h3 class="product-title">продукт</h3>
-      </div>
-    </div>
+    {% endfor %}
   </div>
-
-
 
   <footer class="site-footer">
     <div class="footer-container">

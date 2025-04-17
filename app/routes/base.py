@@ -21,28 +21,38 @@ def home_page():
 def about_page():
     return FileResponse("app/templates/about.html") 
 
-@router.get("/sex/")
+@router.get("/stat/")
 def show_shop(request: Request):
     conn = get_db_connection()
     cur = conn.cursor()
     try:
         cur.execute("SELECT product_id, product_name, description, price, image FROM products")
         products = cur.fetchall()
-        product_list = [
-            {
-                "id": row["product_id"],
-                "name": row["product_name"],
-                "description": row["description"] if row["description"] else "No description.",
-                "price": row["price"],
-                "image": row["image"]
-            } for row in products
-        ]
-        
+
+        formatted_data = "\n".join([
+            f"{row[1]} — {row[3]} ₸. {row[2] or 'Нет описания'}"
+            for row in products
+        ])
+
+        prompt = (
+            "Сделай краткий аналитический отчёт по следующим товарам:\n"
+            f"{formatted_data}\n\n"
+            "Найди самый дорогой и самый дешёвый товар, сделай распределение по ценам."
+        )
+
+        response = model.generate_content(prompt)
+
+        stat_text = response.text
+        print("DEBUG: RESPONSE TEXT >>>")
+        print(response.text)
+
+
     finally:
         cur.close()
         conn.close()
 
-    return templates.TemplateResponse("shop.html", {
+    return templates.TemplateResponse("analytics.html", {
         "request": request,
-        "products": product_list,
+        "stat": stat_text
     })
+

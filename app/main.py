@@ -40,6 +40,14 @@ def get_product_detail():
     return FileResponse("app/templates/product_detail.html") 
 
 
+@app.get("/profile/")
+def profile_page():
+    return FileResponse("app/templates/profile.html")
+
+
+@app.get("/analytics/")
+def profile_page():
+    return FileResponse("app/templates/analytics.html")
 
 
 #     venv/Scripts/activate

@@ -20,7 +20,7 @@ def show_shop(request: Request):
     try:
         cur.execute("SELECT product_id, product_name, description, price, image FROM products")
         products = cur.fetchall()
-        print("DEBUG: products from DB -->", products)
+        # print("DEBUG: products from DB -->", products)
         product_list = [
             {
                 "id": row["product_id"],
