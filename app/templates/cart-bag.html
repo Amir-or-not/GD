@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GPlace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/all.min.css">
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="/static/js/scroll.js"></script>
+  <script src="/static/js/cart.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">
+      <a href="/home/">
+        <img src="/static/images/GD1.png" alt="Logo" class="logo-image">
+      </a>
+    </div>
+  
+    <div class="nav-links">
+      <a href="/home/">Explore</a>
+      <a href="/shop/">Shop</a>
+      <a href="#">New collections</a>
+      <a href="#">Learn about GD</a>
+    </div>
+  
+    <div class="search-box">
+      <input type="text" placeholder="Looking for something...">
+    </div>
+  
+    <div class="auth-container">
+      <a href="/login/" class="sign-up">Sign In</a>
+      <a href="/register/" class="sign-in">Sign Up</a>
+    </div>
+  
+    <div class="icons">
+      <div class="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <div class="cart-dropdown">
+          <div class="cart-items">
+            <p> YOUR ITEMS</p>
+            <div class="cart-item">
+              <img src="/static/images/ring.png" alt="Silver Watch">
+              <div class="item-info">
+                <p>Silver Watch</p>
+                <span>$120</span>
+              </div>
+            </div>
+            <div class="cart-item">
+              <img src="/static/images/bracelet.png" alt="Leather Bracelet">
+              <div class="item-info">
+                <p>Leather Bracelet</p>
+                <span>$45</span>
+              </div>
+            </div>
+          </div>
+          <button class="view-cart-btn">View Order</button>
+        </div>
+      </div>
+      <a href="/profile/">
+        <i class="fas fa-user-circle"></i>
+      </a>
+    </div>
+  </nav>
+  
+
+  <div class="cart-page">
+    <div class="products-grid">
+      {% for item in items %}
+      <div class="product-card">
+        <img src="/{{ item.image }}" alt="{{ item.name }}" class="product-image">
+        <button class="wishlist-button">♡</button>
+        <div class="product-info">
+          <div class="product-tags">
+            <span class="tag">В КОРЗИНЕ</span>
+          </div>
+          <h3 class="product-title">{{ item.name }}</h3>
+          <p class="product-description">{{ item.description }}</p>
+          <p class="product-price">{{ item.price }} ₸ × {{ item.quantity }} шт</p>
+          <p class="product-total">Сумма: {{ item.price * item.quantity }} ₸</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    {% if not items %}
+      <p>Ваша корзина пуста.</p>
+    {% endif %}
+    <section class="trending-section-v2">
+        <h2>Popular Now</h2>
+        <div class="trending-products-v2">
+          <div class="product-card-v2">
+            <img src="/static/images/ring.png" alt="Rings">
+            <div class="product-info-v2">
+              <p class="product-category-v2">Rings</p>
+              <h3 class="product-name-v2">Elegant Silver Ring</h3>
+              <p class="product-price-v2">$120</p>
+              <span class="product-tag-v2">Best Seller</span>
+            </div>
+          </div>
+          <div class="product-card-v2">
+            <img src="/static/images/ring.png" alt="Bracelets">
+            <div class="product-info-v2">
+              <p class="product-category-v2">Bracelets</p>
+              <h3 class="product-name-v2">Leather Charm Bracelet</h3>
+              <p class="product-price-v2">$89</p>
+              <span class="product-tag-v2">Trending</span>
+            </div>
+          </div>
+          <div class="product-card-v2">
+            <img src="/static/images/ring.png" alt="Necklaces">
+            <div class="product-info-v2">
+              <p class="product-category-v2">Necklaces</p>
+              <h3 class="product-name-v2">Gold Heart Necklace</h3>
+              <p class="product-price-v2">$145</p>
+              <span class="product-tag-v2">New Arrival</span>
+            </div>
+          </div>
+          <div class="product-card-v2">
+            <img src="/static/images/ring.png" alt="Earrings">
+            <div class="product-info-v2">
+              <p class="product-category-v2">Earrings</p>
+              <h3 class="product-name-v2">Diamond Studs</h3>
+              <p class="product-price-v2">$199</p>
+              <span class="product-tag-v2">Exclusive</span>
+            </div>
+          </div>
+        </div>
+      </section>      
+  </div>
+  
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-section about">
+      <h2>About Us</h2>
+      <p>Your go-to destination for luxury watches and accessories. Discover timeless elegance and modern design.</p>
+    </div>
+    <div class="footer-section links">
+      <h2>Quick Links</h2>
+      <ul>
+        <li><a href="#">Shop</a></li>
+        <li><a href="#">Collections</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-section social">
+      <h2>Follow Us</h2>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-telegram"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 GD Accesories. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

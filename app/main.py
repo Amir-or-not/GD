@@ -39,16 +39,17 @@ def about_page():
 def get_product_detail():
     return FileResponse("app/templates/product_detail.html") 
 
-
 @app.get("/profile/")
 def profile_page():
     return FileResponse("app/templates/profile.html")
 
-
-@app.get("/analytics/")
+@app.get("/stat/")
 def profile_page():
     return FileResponse("app/templates/analytics.html")
 
+@app.get("/cart/")
+def profile_page():
+    return FileResponse("app/templates/cart-bag.html")
 
 #     venv/Scripts/activate
 #     uvicorn app.main:app --reload

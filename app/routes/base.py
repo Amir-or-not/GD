@@ -23,6 +23,7 @@ def about_page():
 
 @router.get("/stat/")
 def show_shop(request: Request):
+    print("STARTED /stat")
     conn = get_db_connection()
     cur = conn.cursor()
     try:
@@ -40,7 +41,14 @@ def show_shop(request: Request):
             "Найди самый дорогой и самый дешёвый товар, сделай распределение по ценам."
         )
 
-        response = model.generate_content(prompt)
+        try:
+            response = model.generate_content(prompt)
+            stat_text = response.text
+            print("DEBUG: RESPONSE TEXT >>>", stat_text)
+        except Exception as e:
+            print("ERROR FROM GEMINI:", e)
+            stat_text = "Ошибка при генерации анализа."
+
 
         stat_text = response.text
         print("DEBUG: RESPONSE TEXT >>>")

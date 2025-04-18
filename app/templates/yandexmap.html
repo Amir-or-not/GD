@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пример Яндекс Карт</title>
+    <link rel="stylesheet" href="/static/all.min.css">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
+    <!-- Подключаем API Яндекс Карт -->
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=6697d662-44c2-454f-9504-19916ebb123e&lang=ru_RU"></script>
+</head>
+<body>
+    <div class="controls">
+        <input type="text" id="search" placeholder="Введите адрес или название места">
+        <button id="searchButton">Найти</button>
+    </div>
+    <div id="map"></div>
+    <script>
+        // Инициализация карты после загрузки API
+        ymaps.ready(init);
+
+        function init() {
+            // Создаем карту с центром в Москве
+            let myMap = new ymaps.Map("map", {
+                center: [55.76, 37.64],
+                zoom: 10,
+                controls: ['zoomControl', 'typeSelector', 'fullscreenControl']
+            });
+
+            // Добавляем элемент поиска на карту
+            let searchControl = new ymaps.control.SearchControl({
+                options: {
+                    provider: 'yandex#search',
+                    float: 'right',
+                    noPlacemark: true
+                }
+            });
+            myMap.controls.add(searchControl);
+
+            // Создаем метку
+            let placemark = new ymaps.Placemark([55.76, 37.64], {
+                balloonContent: 'Москва'
+            }, {
+                preset: 'islands#redDotIcon',
+                draggable: true
+            });
+            myMap.geoObjects.add(placemark);
+
+            // Обработка поиска по кнопке
+            document.getElementById('searchButton').addEventListener('click', function() {
+                searchLocation();
+            });
+
+            // Обработка нажатия Enter в поле поиска
+            document.getElementById('search').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchLocation();
+                }
+            });
+
+            // Функция поиска местоположения
+            function searchLocation() {
+                const address = document.getElementById('search').value;
+                if (!address) return;
+
+                // Используем геокодер Яндекс Карт
+                ymaps.geocode(address).then(function(res) {
+                    let firstGeoObject = res.geoObjects.get(0);
+                    
+                    if (firstGeoObject) {
+                        // Получаем координаты найденного объекта
+                        let coords = firstGeoObject.geometry.getCoordinates();
+                        
+                        // Перемещаем карту к найденному объекту
+                        myMap.setCenter(coords, 15);
+                        
+                        // Перемещаем метку
+                        placemark.geometry.setCoordinates(coords);
+                        
+                        // Отображаем балун с информацией
+                        placemark.properties.set('balloonContent', firstGeoObject.getAddressLine());
+                        placemark.balloon.open();
+                    } else {
+                        alert('Место не найдено');
+                    }
+                }).catch(function(error) {
+                    console.error('Ошибка геокодирования:', error);
+                    alert('Произошла ошибка при поиске');
+                });
+            }
+
+            // Обработка клика по карте для установки метки
+            myMap.events.add('click', function(e) {
+                const coords = e.get('coords');
+                
+                // Перемещаем метку
+                placemark.geometry.setCoordinates(coords);
+                
+                // Получаем информацию о месте по координатам
+                ymaps.geocode(coords).then(function(res) {
+                    let firstGeoObject = res.geoObjects.get(0);
+                    if (firstGeoObject) {
+                        placemark.properties.set('balloonContent', firstGeoObject.getAddressLine());
+                        placemark.balloon.open();
+                    } else {
+                        placemark.properties.set('balloonContent', 'Координаты: ' + coords[0].toFixed(5) + ', ' + coords[1].toFixed(5));
+                        placemark.balloon.open();
+                    }
+                });
+            });
+
+            // При перетаскивании метки обновляем информацию
+            placemark.events.add('dragend', function() {
+                const coords = placemark.geometry.getCoordinates();
+                
+                ymaps.geocode(coords).then(function(res) {
+                    let firstGeoObject = res.geoObjects.get(0);
+                    if (firstGeoObject) {
+                        placemark.properties.set('balloonContent', firstGeoObject.getAddressLine());
+                        placemark.balloon.open();
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

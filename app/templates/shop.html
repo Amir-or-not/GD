@@ -24,7 +24,7 @@
       <a href="/home/">Explore</a>
       <a href="/shop/">Shop</a>
       <a href="#">New collections</a>
-      <a href="#">Learn about GD</a>
+      <a href="/stat/">Learn about GD</a>
     </div>
     <div class="search-box">
       <input type="text" placeholder="Looking for something...">
@@ -34,8 +34,8 @@
       <a href="/register/" class="sign-in">Sign Up</a>
     </div>
     <div class="icons">
-      <i class="fas fa-shopping-cart"></i>
-      <i class="fas fa-user-circle"></i>
+      <i href="/cart/" class="fas fa-shopping-cart"></i>
+      <i href="/profile/" class="fas fa-user-circle"></i>
     </div>
   </nav>
   <!-- баннер -->
@@ -99,7 +99,7 @@
 
 <!-- карточки -->
 
-  <section class="filter-section">
+  <section class="filter-section" style = 'position: relative; right: 105px;'>
     <div class="nav-container">
       <button class="filter-button">
         <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -111,7 +111,7 @@
         </svg>
         FILTER & SORT
       </button>
-      <div class="search-container">
+      <div style = 'position: relative; right: 52.5px;' class="search-container">
         <input type="text" class="search-input" placeholder="Search for jewelry...">
         <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"></circle>
@@ -125,7 +125,7 @@
     {% for product in products %}
     <div class="product-card">
       <img src="{{ product.image }}" alt="Product" class="product-image">
-      <button class="wishlist-button">♡</button>
+  
       <div class="product-info">
         <div class="product-tags">
           <span class="tag">BEST SELLER</span>
@@ -133,11 +133,16 @@
         <h3 class="product-title">{{ product.name }}</h3>
         <p class="product-description">{{ product.description }}</p>
         <p class="product-price">{{ product.price }} ₸</p>
+        <form method="post" action="/add-to-cart/{{ product.id }}">
+          <label>Количество:</label>
+          <input type="number" name="quantity" value="1" min="1" class="quantity-input">
+          <button type="submit" class="add-to-cart-button">🛒</button>
+        </form>
       </div>
     </div>
     {% endfor %}
   </div>
-
+  
   <footer class="site-footer">
     <div class="footer-container">
       <div class="footer-section about">

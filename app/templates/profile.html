@@ -11,31 +11,60 @@
   <link rel="stylesheet" href="/static/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="/static/js/scroll.js"></script>
+  <script src="/static/js/cart.js"></script>
+  <script src="/static/js/windows.js"></script>
 </head>
 <body>
-
   <nav class="navbar">
     <div class="logo">
       <a href="/home/">
         <img src="/static/images/GD1.png" alt="Logo" class="logo-image">
       </a>
     </div>
+  
     <div class="nav-links">
-      <a href="/home/">Explore</a>
+      <a href="#">Explore</a>
       <a href="/shop/">Shop</a>
       <a href="#">New collections</a>
       <a href="#">Learn about GD</a>
     </div>
+  
     <div class="search-box">
       <input type="text" placeholder="Looking for something...">
     </div>
+  
     <div class="auth-container">
       <a href="/login/" class="sign-up">Sign In</a>
       <a href="/register/" class="sign-in">Sign Up</a>
     </div>
+  
     <div class="icons">
-      <i class="fas fa-shopping-cart"></i>
-      <i class="fas fa-user-circle"></i>
+      <div class="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <div class="cart-dropdown">
+          <div class="cart-items">
+            <p> YOUR ITEMS</p>
+            <div class="cart-item">
+              <img src="/static/images/ring.png" alt="Silver Watch">
+              <div class="item-info">
+                <p>Silver Watch</p>
+                <span>$120</span>
+              </div>
+            </div>
+            <div class="cart-item">
+              <img src="/static/images/bracelet.png" alt="Leather Bracelet">
+              <div class="item-info">
+                <p>Leather Bracelet</p>
+                <span>$45</span>
+              </div>
+            </div>
+          </div>
+          <a href="/cart/" class="view-cart-btn">VIEW DETAILS</a>
+        </div>
+      </div>
+      <a href="/profile/">
+        <i class="fas fa-user-circle"></i>
+      </a>
     </div>
   </nav>
 
@@ -62,43 +91,259 @@
       </div>
   
       <div class="profile-links">
-        <a href="#">View Order History</a>
-        <a href="#">Favorites</a>
-        <a href="#">Delivery Addresses</a>
+        <a href="#" id="orderHistoryLink">View Order History</a>
+        <a href="#" id="favoritesLink">Favorites</a>
+        <a href="#" id="addressesLink">Delivery Addresses</a>
         <a href="#">Logout</a>
       </div>
     </div>
   </section>
 
+  <!-- упрвлекие -->
+  <div id="editProfileModal" class="modal-p2">
+    <div class="modal-content-p2">
+      <span class="close-modal-p2" onclick="closeModal('editProfileModal')">&times;</span>
+      <h2>Edit Profile</h2>
+      <form id="editProfileForm">
+        <div class="form-group-p2">
+          <label for="username">Username</label>
+          <input type="text" id="username" value="@условный_user">
+        </div>
+        <div class="form-group-p2">
+          <label for="email">Email</label>
+          <input type="email" id="email" value="user@example.com">
+        </div>
+        <div class="form-group-p2">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" value="John Doe">
+        </div>
+        <div class="form-group-p2">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" value="+1 234 567 8900">
+        </div>
+        <div class="modal-actions-p2">
+          <button type="button" class="modal-btn-p2 cancel-btn-p2" onclick="closeModal('editProfileModal')">Cancel</button>
+          <button type="button" class="modal-btn-p2 save-btn-p2" onclick="saveProfile()">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-<footer class="site-footer">
-  <div class="footer-container">
-    <div class="footer-section about">
-      <h2>About Us</h2>
-      <p>Your go-to destination for luxury watches and accessories. Discover timeless elegance and modern design.</p>
+  <!-- окно пароля-->
+  <div id="changePasswordModal" class="modal-p2">
+    <div class="modal-content-p2">
+      <span class="close-modal-p2" onclick="closeModal('changePasswordModal')">&times;</span>
+      <h2>Change Password</h2>
+      <form id="changePasswordForm">
+        <div class="form-group-p2">
+          <label for="currentPassword">Current Password</label>
+          <input type="password" id="currentPassword">
+        </div>
+        <div class="form-group-p2">
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword">
+        </div>
+        <div class="form-group-p2">
+          <label for="confirmPassword">Confirm New Password</label>
+          <input type="password" id="confirmPassword">
+        </div>
+        <div class="modal-actions-p2">
+          <button type="button" class="modal-btn-p2 cancel-btn-p2" onclick="closeModal('changePasswordModal')">Cancel</button>
+          <button type="button" class="modal-btn-p2 save-btn-p2" onclick="changePassword()">Update Password</button>
+        </div>
+      </form>
     </div>
-    <div class="footer-section links">
-      <h2>Quick Links</h2>
-      <ul>
-        <li><a href="#">Shop</a></li>
-        <li><a href="#">Collections</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
+  </div>
+
+  <!-- история -->
+  <div id="orderHistoryPage" class="page-content-p2">
+    <div class="page-header-p2">
+      <h1>Order History</h1>
+      <a href="/profile/" class="back-to-profile-p2" onclick="showProfilePage()">
+        <i class="fas fa-arrow-left"></i> Back to Profile
+      </a>
     </div>
-    <div class="footer-section social">
-      <h2>Follow Us</h2>
-      <div class="social-icons">
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-github"></i></a>
-        <a href="#"><i class="fab fa-telegram"></i></a>
+    
+    <div class="order-list-p2">
+      <div class="order-item-p2">
+        <div class="order-header-p2">
+          <div>
+            <h3>Order #GD78934</h3>
+            <p>April 15, 2025</p>
+          </div>
+          <div>
+            <p><strong>Status:</strong> Delivered</p>
+            <p><strong>Total:</strong> $165.00</p>
+          </div>
+        </div>
+        <div class="order-products-p2">
+          <div class="order-product-p2">
+            <img src="/static/images/ring.png" alt="Silver Watch" class="order-product-image-p2">
+            <div>
+              <h4>Silver Watch</h4>
+              <p>$120.00</p>
+              <p>Qty: 1</p>
+            </div>
+          </div>
+          <div class="order-product-p2">
+            <img src="/static/images/bracelet.png" alt="Leather Bracelet" class="order-product-image-p2">
+            <div>
+              <h4>Leather Bracelet</h4>
+              <p>$45.00</p>
+              <p>Qty: 1</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="order-item-p2">
+        <div class="order-header-p2">
+          <div>
+            <h3>Order #GD78653</h3>
+            <p>March 28, 2025</p>
+          </div>
+          <div>
+            <p><strong>Status:</strong> Delivered</p>
+            <p><strong>Total:</strong> $230.00</p>
+          </div>
+        </div>
+        <div class="order-products-p2">
+          <div class="order-product-p2">
+            <img src="/static/images/bracelet.png" alt="Gold Watch" class="order-product-image-p2">
+            <div>
+              <h4>Gold Watch</h4>
+              <p>$230.00</p>
+              <p>Qty: 1</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p>&copy; 2025 GD Accesories. All rights reserved.</p>
-  </div>
-</footer>
 
+  <!-- избранные -->
+  <div id="favoritesPage" class="page-content-p2">
+    <div class="page-header-p2">
+      <h1>Your Favorites</h1>
+      <a href="#" class="back-to-profile-p2" onclick="showProfilePage()">
+        <i class="fas fa-arrow-left"></i> Back to Profile
+      </a>
+    </div>
+    
+    <div class="favorites-grid-p2">
+      <div class="favorite-item-p2">
+        <span class="remove-favorite-p2" onclick="removeFavorite(this)">
+          <i class="fas fa-times"></i>
+        </span>
+        <img src="/static/images/ring.png" alt="Silver Watch" class="favorite-image-p2">
+        <div class="favorite-info-p2">
+          <h3 class="favorite-name-p2">Silver Watch</h3>
+          <p class="favorite-price-p2">$120.00</p>
+        </div>
+      </div>
+      
+      <div class="favorite-item-p2">
+        <span class="remove-favorite-p2" onclick="removeFavorite(this)">
+          <i class="fas fa-times"></i>
+        </span>
+        <img src="/static/images/bracelet.png" alt="Leather Bracelet" class="favorite-image-p2">
+        <div class="favorite-info-p2">
+          <h3 class="favorite-name-p2">Leather Bracelet</h3>
+          <p class="favorite-price-p2">$45.00</p>
+        </div>
+      </div>
+      
+      <div class="favorite-item-p2">
+        <span class="remove-favorite-p2" onclick="removeFavorite(this)">
+          <i class="fas fa-times"></i>
+        </span>
+        <img src="/static/images/bracelet.png" alt="Gold Watch" class="favorite-image-p2">
+        <div class="favorite-info-p2">
+          <h3 class="favorite-name-p2">Gold Watch</h3>
+          <p class="favorite-price-p2">$230.00</p>
+        </div>
+      </div>
+      
+      <div class="favorite-item-p2">
+        <span class="remove-favorite-p2" onclick="removeFavorite(this)">
+          <i class="fas fa-times"></i>
+        </span>
+        <img src="/static/images/ring.png" alt="Diamond Ring" class="favorite-image-p2">
+        <div class="favorite-info-p2">
+          <h3 class="favorite-name-p2">Diamond Ring</h3>
+          <p class="favorite-price-p2">$550.00</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- доставка  -->
+  <div id="addressesPage" class="page-content-p2">
+    <div class="page-header-p2">
+      <h1>Delivery Addresses</h1>
+      <a href="/profile/" class="back-to-profile-p2" onclick="showProfilePage()">
+        <i class="fas fa-arrow-left"></i> Back to Profile
+      </a>
+    </div>
+    
+    <div class="address-list-p2">
+      <div class="address-item-p2">
+        <span class="default-badge-p2">Default</span>
+        <h3>Home</h3>
+        <p>John Doe</p>
+        <p>123 Main Street, Apt 4B</p>
+        <p>New York, NY 10001</p>
+        <p>United States</p>
+        <p>Phone: +1 234 567 8900</p>
+        <div class="address-actions-p2">
+          <button class="address-btn-p2 edit-address-p2">Edit</button>
+        </div>
+      </div>
+      
+      <div class="address-item-p2">
+        <h3>Work</h3>
+        <p>John Doe</p>
+        <p>456 Business Avenue</p>
+        <p>New York, NY 10002</p>
+        <p>United States</p>
+        <p>Phone: +1 234 567 8900</p>
+        <div class="address-actions-p2">
+          <button class="address-btn-p2 edit-address-p2">Edit</button>
+          <button class="address-btn-p2 delete-address-p2">Delete</button>
+        </div>
+      </div>
+    </div>
+    
+    <button class="add-address-btn-p2">Add New Address</button>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-section about">
+        <h2>About Us</h2>
+        <p>Your go-to destination for luxury watches and accessories. Discover timeless elegance and modern design.</p>
+      </div>
+      <div class="footer-section links">
+        <h2>Quick Links</h2>
+        <ul>
+          <li><a href="#">Shop</a></li>
+          <li><a href="#">Collections</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section social">
+        <h2>Follow Us</h2>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-github"></i></a>
+          <a href="#"><i class="fab fa-telegram"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 GD Accesories. All rights reserved.</p>
+    </div>
+  </footer>
 </body>
 </html>

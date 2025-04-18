@@ -95,3 +95,14 @@ answer text
 insert into products(product_name, description, product_category, image, price, amount)
 values
 ('ganyu','perfect','for myself','https://i.pinimg.com/736x/a2/72/29/a27229e09f070076456dff9dffa31200.jpg',999.90,10);
+
+
+insert into products(product_name, description, product_category, image, price, amount)
+values
+('ganyu','perfect','for myself', '/static/images/g.webp', 1000000, 20);
+
+
+
+insert into cart(user_id, product_id, quantity)
+values
+(1,1,10);

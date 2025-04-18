@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, Form, Depends, HTTPException
 from fastapi.templating import Jinja2Templates
 from app.database import get_db_connection
 from fastapi.responses import RedirectResponse
+from app.routes import users, products, base
 import google.generativeai as genai
 
 
@@ -68,25 +69,101 @@ def product_detail(product_name: str, request: Request):
         "product": product
     })
 
-# @router.post("/admin/add-product/")
-# def add_product(
-#     request: Request,
-#     name: str = Form(...),
-#     description: str = Form(...),
-#     old_price: float = Form(...),
-#     new_price: float = Form(...),
-#     image_url: str = Form(...)
-# ):
-#     conn = get_db_connection()
-#     cur = conn.cursor()
-#     try:
-#         cur.execute("""
-#             INSERT INTO products (name, description, old_price, new_price, image_url)
-#             VALUES (%s, %s, %s, %s, %s)
-#         """, (name, description, old_price, new_price, image_url))
-#         conn.commit()
-#     finally:
-#         cur.close()
-#         conn.close()
+@router.get("/cart/")
+def show_cart(request: Request):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    
+    user_id = request.cookies.get("user_id")
+    
+    # if not user_id:
+    #     return RedirectResponse(url="/login/")  
 
-#     return RedirectResponse(url="/shop/", status_code=303)
+    try:
+        cur.execute("""
+            select p.product_id, p.product_name, p.description, p.image, p.price, c.quantity
+            from cart c
+            join products p on c.product_id = p.product_id
+            where c.user_id = %s
+        """, (user_id,))
+        
+        cart_items = cur.fetchall()
+
+        items = [
+            {
+                "id": row[0],
+                "name": row[1],
+                "description": row[2] or "Нет описания",
+                "image": row[3],
+                "price": row[4],
+                "quantity": row[5]
+            } for row in cart_items
+        ]
+
+    finally:
+        cur.close()
+        conn.close()
+
+    return templates.TemplateResponse("cart-bag.html", {
+        "request": request,
+        "items": items
+    })
+
+@router.post("/add-to-cart/{product_id}")
+def add_to_cart(request: Request, product_id: int, quantity: int = Form(1)):
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    user_id = request.cookies.get("user_id") or 1
+
+    if not user_id:
+        raise HTTPException(status_code=401, detail="User not authenticated")
+
+    try:
+        cur.execute("""
+            select quantity from cart
+            where user_id = %s and product_id = %s
+        """, (user_id, product_id))
+        result = cur.fetchone()
+
+        if result:
+            cur.execute("""
+                update cart
+                set quantity = quantity + %s
+                where user_id = %s and product_id = %s
+            """, (quantity, user_id, product_id))
+        else:
+            cur.execute("""
+                insert into cart (user_id, product_id, quantity)
+                values (%s, %s, %s)
+            """, (user_id, product_id, quantity))
+
+        conn.commit()
+    finally:
+        cur.close()
+        conn.close()
+
+    return RedirectResponse(url="/shop/", status_code=302)  
+
+@router.post("/admin/add-product/")
+def add_product(
+    request: Request,
+    name: str = Form(...),
+    description: str = Form(...),
+    old_price: float = Form(...),
+    new_price: float = Form(...),
+    image_url: str = Form(...)
+):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            INSERT INTO products (name, description, old_price, new_price, image_url)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (name, description, old_price, new_price, image_url))
+        conn.commit()
+    finally:
+        cur.close()
+        conn.close()
+
+    return RedirectResponse(url="/shop/", status_code=303)

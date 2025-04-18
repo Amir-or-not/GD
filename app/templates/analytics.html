@@ -1,81 +1,37 @@
-<!-- templates/analytics.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Product Analytics</title>
-    <link rel="stylesheet" href="/static/styles.css"> 
-    <style>
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        pre {
-            background: #f0f0f0;
-            padding: 1rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Аналитика по товарам</title>
+  <link rel="stylesheet" href="/static/styles.css"> 
+  <style>
+    .analytics-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f8f8f8;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+    .analytics-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .stat-line {
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">
-          <a href="/home/">
-            <img src="/static/images/GD1.png" alt="Logo" class="logo-image">
-          </a>
-        </div>
-        <div class="nav-links">
-          <a href="/home/">Explore</a>
-          <a href="/shop/">Shop</a>
-          <a href="#">New collections</a>
-          <a href="#">Learn about GD</a>
-        </div>
-        <div class="search-box">
-          <input type="text" placeholder="Looking for something...">
-        </div>
-        <div class="auth-container">
-          <a href="/login/" class="sign-up">Sign In</a>
-          <a href="/register/" class="sign-in">Sign Up</a>
-        </div>
-        <div class="icons">
-          <i class="fas fa-shopping-cart"></i>
-          <i class="fas fa-user-circle"></i>
-        </div>
-      </nav>
-    <div class="container">
-        <h1>Product Analytics</h1>
-        <pre>{{ stat }}</pre>
+  <div class="analytics-container">
+    <h1>Аналитика по товарам</h1>
+    <div class="analytics-block">
+      {% for line in stat.split('\n') %}
+        <p>{{ line }}</p>
+      {% endfor %}
     </div>
-    <footer class="site-footer">
-        <div class="footer-container">
-          <div class="footer-section about">
-            <h2>About Us</h2>
-            <p>Your go-to destination for luxury watches and accessories. Discover timeless elegance and modern design.</p>
-          </div>
-          <div class="footer-section links">
-            <h2>Quick Links</h2>
-            <ul>
-              <li><a href="#">Shop</a></li>
-              <li><a href="#">Collections</a></li>
-              <li><a href="#">About</a></li>
-              <li><a href="#">Contact</a></li>
-            </ul>
-          </div>
-          <div class="footer-section social">
-            <h2>Follow Us</h2>
-            <div class="social-icons">
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-github"></i></a>
-              <a href="#"><i class="fab fa-telegram"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>&copy; 2025 GD Accesories. All rights reserved.</p>
-        </div>
-      </footer>
+  </div>
 </body>
 </html>
